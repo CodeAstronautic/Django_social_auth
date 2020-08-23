@@ -1,0 +1,188 @@
+{% load static %}
+{% static "img/success.gif" as baseURL %}
+<!doctype html>
+<html lang="en">
+    <head>
+		<!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <title>Home Page</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        
+    </head>
+
+    <body style="background-image: url('{% static 'img/backgrounds/1.jpg' %}'); background-position:center; height:30vh; background-repeat: no-repeat;">
+
+		<!-- Top menu -->
+		<nav class="navbar navbar-dark fixed-top navbar-expand-md navbar-no-bg">
+			<div class="container">
+				<a class="navbar-brand">Binary Balls</a>
+			    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			        <span class="navbar-toggler-icon"></span>
+			    </button>
+			    <div class="collapse navbar-collapse" id="navbarNav">
+			        <ul class="navbar-nav ml-auto">
+			            <li class="nav-item">
+			                <a class="nav-link scroll-link" href="#top-content">Top</a>
+			            </li>
+			            <li class="nav-item">
+			                <a class="nav-link scroll-link" href="#about-us">About</a>
+			            </li>
+						{% if user and not user.is_anonymous %}
+						<li class="nav-item">
+			                <a class="nav-link scroll-link" href="#">Hello, {{ user.get_full_name }}!</a>
+			            </li>						
+						{% endif %}
+			        </ul>
+			    </div>
+		    </div>
+		</nav>
+
+        <!-- Top content -->
+        <div class="top-content">
+            <div class="container">
+            	
+                <div class="row">
+                    <div class="col-md-8 offset-md-2 text">
+                        <h1 class="wow fadeInLeftBig">Django-social-auth</h1>
+                        <div class="description wow fadeInLeftBig">
+                        	<p>
+								Django Social Auth is an easy to setup social authentication/authorization mechanism for Django projects.
+								Crafted using base code from django-twitter-oauth and django-openid-auth, implements a common interface to 
+								define new authentication providers from third parties.
+                        	</p>
+                        </div>
+                        <div class="top-big-link wow fadeInUp">
+							{% if user and not user.is_anonymous %}
+                        	<a class="btn btn-primary btn-link-1" href="{% url 'logout' %}">Logout</a>
+							{% else %}
+							<a class="btn btn-primary btn-link-2" href="{% url 'signup' %}">Signup</a>
+                        	<a class="btn btn-primary btn-link-1" href="{% url 'login' %}">Login</a>
+							{% endif %}
+                        </div>
+                    </div>					
+                </div>
+            </div>            
+        </div>
+
+		<!-- About us -->
+        <div class="about-us-container section-container section-container-gray-bg">
+	        <div class="container">
+	            <div class="row">
+	            	<div class="col-12 col-lg-7 about-us-box wow fadeInLeft">
+	                    <div class="about-us-box-text">
+	                    	<h3>About You</h3>
+	                    	<p class="medium-paragraph">
+							{% if user and not user.is_anonymous %}
+	                    	<ul>
+								<li>Account Status : <b>Running <i class="fa fa-toggle-on"></i></b></li>
+								<li>Full Name : {{ user.get_full_name }}<b></b> </li>
+							</ul>
+							{% else %}
+							To see your details Login first.<br/>
+							<ul>
+								<li>Account Status : <b> Not Running <i class="fa fa-toggle-off"></i></b></li>
+							</ul>
+							{% endif %}
+	                    	</p>
+	                    </div>
+	                </div>
+	                <div class="col-12 col-lg-5 about-us-box wow fadeInUp">
+						{% if user and not user.is_anonymous %}
+							<div class="about-us-box-img">
+								<img src="{% static 'img/about/1.jpg' %}" alt="about" data-at2x="{% static 'img/about/1.jpg' %}">
+							</div>
+						{% else %}
+							<div class="about-us-box-img">
+								<img src="{% static 'img/about/1.jpg' %}" alt="about" data-at2x="{% static 'img/about/1.jpg' %}">
+							</div>
+						{% endif %}
+	                	
+	                </div>
+	            </div>
+	        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+	        <div class="container">
+                <div class="row">
+                	<div class="col footer-bottom">
+		           		<a class="scroll-link" href="#top-content"><i class="fas fa-chevron-up"></i></a>
+		           	</div>
+                </div>
+	        </div>
+        </footer>
+
+        <!-- Javascript -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script>
+		$(document).ready(function(){
+			// File upload via Ajax
+			$("#uploadForm").on('submit', function(e){
+				e.preventDefault();
+				$.ajax({
+					xhr: function() {
+						var xhr = new window.XMLHttpRequest();
+						xhr.upload.addEventListener("progress", function(evt) {
+							if (evt.lengthComputable) {
+								var percentComplete = ((evt.loaded / evt.total) * 100);
+								$(".progress-bar").width(percentComplete + '%');
+								$(".progress-bar").html(percentComplete+'%');
+							}
+						}, false);
+						return xhr;
+					},
+					type: 'POST',
+					url: ,
+					data: new FormData(this),
+					contentType: false,
+					cache: false,
+					processData:false,
+					beforeSend: function(){
+						$(".progress-bar").width('0%');
+						$('#uploadStatus').html('<p style="color:#28A74B;">File has uploaded successfully!</p>');
+					},
+					success: function(resp){
+						url = '/'
+						setTimeout(function(){ window.location = url; }, 2000);
+					}
+				});
+			});
+			
+			// File type validation
+			$("#fileInput").change(function(){
+				var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+				var file = this.files[0];
+				var fileType = file.type;
+				if(!allowedTypes.includes(fileType)){
+					alert('Please select a valid file (JPEG/JPG/PNG/GIF).');
+					$("#fileInput").val('');
+					return false;
+				}
+			});
+		});
+		</script>
+		
+        <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'js/jquery-migrate-3.0.0.min.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+        <script src="{% static 'js/wow.min.js' %}"></script>
+        <script src="{% static 'js/retina-1.1.0.min.js' %}"></script>
+        <script src="{% static 'js/waypoints.min.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+
+    </body>
+
+</html>
